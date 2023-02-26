@@ -1,10 +1,10 @@
 package com.musala.thedrone.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-@Repository
+import org.springframework.data.jpa.repository.JpaRepository;
+
 public interface MedicationRepository extends JpaRepository<Medication, Long> {
   // Find medication by code
-  Medication findByCode(String code);
+  Optional<Medication> findByCode(String code);
 }

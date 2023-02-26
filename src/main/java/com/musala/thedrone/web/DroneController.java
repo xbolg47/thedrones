@@ -29,6 +29,12 @@ public class DroneController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
+  @PostMapping("/{serialNumber}/{medicationCode}")
+  public ResponseEntity<Void> loadDrone(@PathVariable String serialNumber, @PathVariable String medicationCode) {
+    droneService.loadDrone(serialNumber, medicationCode);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
   @RequestMapping("/available")
   public ResponseEntity<List<Drone>> getAvailableDrones() {
     ResponseEntity<List<Drone>> availableDrones = droneService.getAvailableDrones();

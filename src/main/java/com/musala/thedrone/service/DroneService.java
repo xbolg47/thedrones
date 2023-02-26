@@ -11,7 +11,7 @@ interface DroneService {
 
   void registerDrone(Drone drone);
 
-  void loadDrone(String serialNumber, Medication medication);
+  void loadDrone(String serialNumber, String medicationCode);
 
   List<Medication> getLoadedMedications(String serialNumber);
 
