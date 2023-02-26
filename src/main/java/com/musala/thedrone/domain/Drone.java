@@ -1,10 +1,16 @@
 package com.musala.thedrone.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 
@@ -31,8 +37,15 @@ public class Drone {
   @Column(name = "state")
   private DroneState state;
 
-  public Drone() {
+  @ManyToMany
+  @JoinTable(name = "drone_medication", joinColumns = { @JoinColumn(name = "serial_number") }, inverseJoinColumns = {
+      @JoinColumn(name = "medication_id") })
+  private List<Medication> loadedMedication = new ArrayList<>();
+  // @JoinTable(name = "drone_medication", joinColumns = @JoinColumn(name =
+  // "serial_number"), inverseJoinColumns = @JoinColumn(name = "medication_id"))
+  // private List<Medication> loadedMedication;
 
+  public Drone() {
   }
 
   public Drone(String serialNumber, DroneModel model,
@@ -85,6 +98,14 @@ public class Drone {
 
   public void setState(DroneState state) {
     this.state = state;
+  }
+
+  public List<Medication> getLoadedMedication() {
+    return loadedMedication;
+  }
+
+  public void setLoadedMedication(List<Medication> loadedMedication) {
+    this.loadedMedication = loadedMedication;
   }
 
 }

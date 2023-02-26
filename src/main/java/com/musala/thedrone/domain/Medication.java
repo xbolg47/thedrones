@@ -1,6 +1,7 @@
 package com.musala.thedrone.domain;
 
-import java.sql.Clob;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,9 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Medication {
 
   @Id
@@ -32,8 +38,11 @@ public class Medication {
   @Lob
   private String image64;
 
-  public Medication() {
+  @JsonIgnore
+  @ManyToMany(mappedBy = "loadedMedication")
+  private List<Drone> drone = new ArrayList<>();
 
+  public Medication() {
   }
 
   public Medication(String name, double weight, String code, String image64) {
@@ -74,6 +83,14 @@ public class Medication {
 
   public void setImage64(String image64) {
     this.image64 = image64;
+  }
+
+  public List<Drone> getDrone() {
+    return drone;
+  }
+
+  public void setDrone(List<Drone> drone) {
+    this.drone = drone;
   }
 
 }
