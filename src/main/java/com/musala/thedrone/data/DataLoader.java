@@ -32,25 +32,20 @@ public class DataLoader implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     // Preload the database with some demo drones
-    Drone drone1 = new Drone("0000000001", DroneModel.Lightweight, 100, 75, DroneState.LOADING);
-    Drone drone2 = new Drone("0000000002", DroneModel.Middleweight, 200, 55, DroneState.LOADING);
+    Drone drone1 = new Drone("0000000001", DroneModel.Lightweight, 100, 24, DroneState.LOADING);
+    Drone drone2 = new Drone("0000000002", DroneModel.Middleweight, 200, 20, DroneState.LOADING);
     Drone drone3 = new Drone("0000000003", DroneModel.Cruiserweight, 350, 65, DroneState.DELIVERING);
     Drone drone4 = new Drone("0000000004", DroneModel.Heavyweight, 500, 26, DroneState.IDLE);
     Drone drone5 = new Drone("0000000005", DroneModel.Lightweight, 100, 50, DroneState.IDLE);
-    // Drone drone6 = new Drone("0000000006", DroneModel.Middleweight, 200, 80,
-    // DroneState.LOADING);
-    // Drone drone7 = new Drone("0000000007", DroneModel.Cruiserweight, 350, 45,
-    // DroneState.RETURNING);
-    // Drone drone8 = new Drone("0000000008", DroneModel.Heavyweight, 500, 35,
-    // DroneState.IDLE);
-    // Drone drone9 = new Drone("0000000009", DroneModel.Lightweight, 100, 45,
-    // DroneState.IDLE);
-    // Drone drone10 = new Drone("0000000010", DroneModel.Middleweight, 200, 95,
-    // DroneState.IDLE);
+    Drone drone6 = new Drone("0000000006", DroneModel.Middleweight, 200, 80, DroneState.LOADING);
+    Drone drone7 = new Drone("0000000007", DroneModel.Cruiserweight, 350, 45, DroneState.RETURNING);
+    Drone drone8 = new Drone("0000000008", DroneModel.Heavyweight, 500, 35, DroneState.IDLE);
+    Drone drone9 = new Drone("0000000009", DroneModel.Lightweight, 100, 45, DroneState.IDLE);
+    Drone drone10 = new Drone("0000000010", DroneModel.Middleweight, 200, 95, DroneState.IDLE);
 
     // Save the drones to the databasex
     droneRepository
-        .saveAll(Arrays.asList(drone1, drone2, drone3, drone4, drone5));
+        .saveAll(Arrays.asList(drone1, drone2, drone3, drone4, drone5, drone6, drone7, drone8, drone9, drone10));
     System.out.println("Drone data Successfully Loaded");
 
     // Preload the database with some demo medications
@@ -67,7 +62,7 @@ public class DataLoader implements CommandLineRunner {
     Medication medication4 = new Medication("Med 05", 70, "MED_005", encodeImageToBase64String(image4));
 
     File image5 = new ClassPathResource("static/images/image5.jpg").getFile();
-    Medication medication5 = new Medication("Med 09", 40, "MED_009", encodeImageToBase64String(image5));
+    Medication medication5 = new Medication("Med 03", 40, "MED_003", encodeImageToBase64String(image5));
 
     // Save the medications to the database -- ,
     medicationRepository.saveAll(Arrays.asList(medication1, medication2, medication3, medication4, medication5));
@@ -76,7 +71,6 @@ public class DataLoader implements CommandLineRunner {
     // load medication onto drone
     List<Medication> loadedMed1 = new ArrayList<>();
     loadedMed1.add(medication2);
-    loadedMed1.add(medication1);
 
     drone1.setLoadedMedication(loadedMed1);
     droneRepository.save(drone1);

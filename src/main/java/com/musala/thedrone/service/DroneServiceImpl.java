@@ -1,6 +1,7 @@
 package com.musala.thedrone.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,10 +54,19 @@ public class DroneServiceImpl implements DroneService {
         if (currentWeight + newWeight <= weightLimit) {
           List<Medication> loadedMed1 = new ArrayList<>();
           loadedMed1.add(medication);
+          drone.setState(DroneState.LOADING);
           drone.setLoadedMedication(loadedMed1);
           droneRepository.save(drone);
           // loadedMedications.add(medication);
           // droneRepository.save(drone);
+
+          // update drone battery level
+          int newBatteryCapacity = drone.getBatteryCapacity() - 5;
+          drone.setBatteryCapacity(newBatteryCapacity);
+          droneRepository.save(drone);
+
+          drone.setState(DroneState.IDLE);
+          droneRepository.save(drone);
         } else {
           throw new IllegalStateException("Drone cannot be loaded with more weight than its weight limit.");
         }
@@ -93,6 +103,14 @@ public class DroneServiceImpl implements DroneService {
   }
 
   @Override
+  public List<Drone> getAllDrones() {
+    List<Drone> drones = droneRepository.findAll();
+    // List<Drone> availableDrones = new ArrayList<>();
+
+    return drones;
+  }
+
+  @Override
   public int getDroneBatteryLevel(String serialNumber) {
     Optional<Drone> drone = droneRepository.findBySerialNumber(serialNumber);
     if (drone.isPresent()) {
@@ -100,6 +118,19 @@ public class DroneServiceImpl implements DroneService {
     } else {
       throw new ResourceNotFoundException("Drone not found with serial number: " + serialNumber);
     }
+  }
+
+  @Override
+  public List<Drone> findByState(DroneState state) {
+    return droneRepository.findByState(state);
+
+  }
+
+  @Override
+  public List<Drone> getDronesBySerialNumber(String serialNumber) {
+    Optional<Drone> droneOptional = droneRepository.findBySerialNumber(serialNumber);
+    List<Drone> droneList = droneOptional.map(Collections::singletonList).orElse(Collections.emptyList());
+    return droneList;
   }
 
   public class ResourceNotFoundException extends RuntimeException {
