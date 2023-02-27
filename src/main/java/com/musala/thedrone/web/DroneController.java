@@ -16,7 +16,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musala.thedrone.domain.Drone;
 import com.musala.thedrone.domain.Medication;
-import com.musala.thedrone.domain.MedicationRepository;
 import com.musala.thedrone.service.DroneServiceImpl;
 
 @RestController
