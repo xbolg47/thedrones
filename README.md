@@ -23,6 +23,7 @@ A service via REST API that allows clients to communicate with the drones (i.e. 
 
 # Some assumptions for the design approach:
  - Medication can be loaded on multiple drones provided the total weight of all the medications does not exceed the weight limit of the drone
+ - A medication cannot be loaded to the same drone twice
  - Preloaded 10 drones and 5 medications
 
 # Run
@@ -32,8 +33,10 @@ A service via REST API that allows clients to communicate with the drones (i.e. 
  - The is a periodic task which checks the drones battery level and save history/audit log in the audit_log table within an interval of 1 minutes
 
 # API Endpoints testing
- - Register a new drone: POST -> http://localhost:8080/drones
-  * Input JSON:
+ - Register a new drone: 
+    - Method: POST 
+    - URL: http://localhost:8080/drones
+    * Input JSON:
 ```json
 {
   "serialNumber": "0000000015",
@@ -54,8 +57,10 @@ A service via REST API that allows clients to communicate with the drones (i.e. 
   "loadedMedication": []
 }
 ```
- - Load a medication onto a drone by serial number: POST -> http://localhost:8080/drones/{serialNumber}/{medicationCode}
-  * OutputJSON:
+ - Load a medication onto a drone by serial number: 
+    - Method: POST 
+    - URL: http://localhost:8080/drones/{serialNumber}/{medicationCode}
+    * OutputJSON:
 ```json
   {
     "serialNumber": "0000000010",
@@ -74,7 +79,10 @@ A service via REST API that allows clients to communicate with the drones (i.e. 
   }
 ```
 
- - Get all loaded medications of a drone by serial number: GET -> http://localhost:8080/drones/{serialNumber}/medications
+ - Get all loaded medications of a drone by serial number: 
+    - Method: GET 
+    - URL: http://localhost:8080/drones/{serialNumber}/medications
+    * OutputJSON:
 ```json
   {
     "name": "Med 02",
@@ -84,8 +92,10 @@ A service via REST API that allows clients to communicate with the drones (i.e. 
   }
 ```
 
- - Get all drones that are currently available for loading: GET -> http://localhost:8080/drones/available
-  * Output JSON:
+ - Get all drones that are currently available for loading:
+    - Method: GET 
+    - URL: http://localhost:8080/drones/available
+    * Output JSON:
 ```json
 [
   {
@@ -131,8 +141,10 @@ A service via REST API that allows clients to communicate with the drones (i.e. 
 ]
 ```
 
- - Get the battery level of a drone by serial number: GET -> http://localhost:8080/drones/{serialNumber}/battery
-  * Output JSON:
+ - Get the battery level of a drone by serial number: 
+    - Method: GET
+    - URL: http://localhost:8080/drones/{serialNumber}/battery
+    * Output JSON:
 ```json
 {
   "serialNumber": "0000000010",

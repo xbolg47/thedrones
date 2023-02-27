@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musala.thedrone.domain.Drone;
 import com.musala.thedrone.domain.Medication;
+import com.musala.thedrone.domain.MedicationRepository;
 import com.musala.thedrone.service.DroneServiceImpl;
 
 @RestController
@@ -44,9 +45,10 @@ public class DroneController {
   public ResponseEntity<String> loadDrone(@PathVariable String serialNumber, @PathVariable String medicationCode) {
     try {
       droneService.loadDrone(serialNumber, medicationCode);
-      List<Drone> drone = droneService.getDronesBySerialNumber(serialNumber);
-      String jsonString = objectMapper.writeValueAsString(drone);
-      return ResponseEntity.ok(jsonString);
+      List<Medication> loadedMedications = droneService.getLoadedMedications(serialNumber);
+      String jsonString = objectMapper.writeValueAsString(loadedMedications);
+      String jsonOutput = "{\"serialNumber\":\"" + serialNumber + "\",\"loadedMedication\":" + jsonString + "}";
+      return ResponseEntity.ok(jsonOutput);
     } catch (DroneNotFoundException ex) {
       return ResponseEntity.notFound().build();
     } catch (JsonProcessingException ex) {
@@ -68,21 +70,35 @@ public class DroneController {
   }
 
   @RequestMapping("/all")
-  public List<Drone> getAllDrones() {
-    List<Drone> allDrones = droneService.getAllDrones();
-    return allDrones;
+  public ResponseEntity<String> getAllDrones() {
+    try {
+      ResponseEntity<List<Drone>> allDrones = droneService.getAllDrones();
+      String jsonString = objectMapper.writeValueAsString(allDrones);
+      return ResponseEntity.ok(jsonString);
+    } catch (DroneNotFoundException ex) {
+      return ResponseEntity.notFound().build();
+    } catch (JsonProcessingException ex) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
   }
 
   @GetMapping("/{serialNumber}/medications")
-  public ResponseEntity<List<Medication>> getLoadedMedications(@PathVariable String serialNumber) {
-    List<Medication> loadedMedications = droneService.getLoadedMedications(serialNumber);
-    return ResponseEntity.ok(loadedMedications);
+  public ResponseEntity<String> getLoadedMedications(@PathVariable String serialNumber) {
+    try {
+      List<Medication> loadedMedications = droneService.getLoadedMedications(serialNumber);
+      String jsonString = objectMapper.writeValueAsString(loadedMedications);
+      String jsonOutput = "{\"serialNumber\":\"" + serialNumber + "\",\"loadedMedication\":" + jsonString + "}";
+      return ResponseEntity.ok(jsonOutput);
+    } catch (DroneNotFoundException ex) {
+      return ResponseEntity.notFound().build();
+    } catch (JsonProcessingException ex) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
   }
 
   @GetMapping("/{serialNumber}/battery")
   public ResponseEntity<String> getDroneBatteryLevel(@PathVariable String serialNumber) {
-    // int batteryLevel = droneService.getDroneBatteryLevel(serialNumber);
-    // return ResponseEntity.ok(batteryLevel);
     try {
       int batteryLevel = droneService.getDroneBatteryLevel(serialNumber);
       String batterS = Integer.toString(batteryLevel);

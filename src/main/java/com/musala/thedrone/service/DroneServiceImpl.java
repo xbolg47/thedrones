@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -52,13 +53,11 @@ public class DroneServiceImpl implements DroneService {
           throw new IllegalStateException("Medication is already loaded onto the drone.");
         }
         if (currentWeight + newWeight <= weightLimit) {
-          List<Medication> loadedMed1 = new ArrayList<>();
-          loadedMed1.add(medication);
+          loadedMedications.add(medication);
+
           drone.setState(DroneState.LOADING);
-          drone.setLoadedMedication(loadedMed1);
+          drone.setLoadedMedication(loadedMedications);
           droneRepository.save(drone);
-          // loadedMedications.add(medication);
-          // droneRepository.save(drone);
 
           // update drone battery level
           int newBatteryCapacity = drone.getBatteryCapacity() - 5;
@@ -103,11 +102,12 @@ public class DroneServiceImpl implements DroneService {
   }
 
   @Override
-  public List<Drone> getAllDrones() {
+  public ResponseEntity<List<Drone>> getAllDrones() {
     List<Drone> drones = droneRepository.findAll();
     // List<Drone> availableDrones = new ArrayList<>();
 
-    return drones;
+    // return drones;
+    return new ResponseEntity<List<Drone>>(drones, HttpStatus.OK);
   }
 
   @Override

@@ -20,7 +20,7 @@ interface DroneService {
 
   List<Drone> getDronesBySerialNumber(String serialNumber);
 
-  List<Drone> getAllDrones();
+  ResponseEntity<List<Drone>> getAllDrones();
 
   int getDroneBatteryLevel(String serialNumber);
 

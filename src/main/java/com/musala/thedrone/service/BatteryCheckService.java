@@ -28,9 +28,9 @@ public class BatteryCheckService {
   @Scheduled(fixedRate = 100000) // One minuites
   public void checkBatteryCapacity() {
     // Run the battery check logic here
-    // List<Drone> drones = droneServiceImpl.findByState(DroneState.IDLE);
-    List<Drone> drones = droneServiceImpl.getAllDrones();
-    for (Drone drone : drones) {
+    ResponseEntity<List<Drone>> drones = droneServiceImpl.getAllDrones();
+    List<Drone> droneList = drones.getBody();
+    for (Drone drone : droneList) {
       if (drone.getBatteryCapacity() < 25) {
         String message = "Drone with serial number " + drone.getSerialNumber() + " has battery level below 25%";
         saveAuditLogEntry(drone.getSerialNumber(), message);

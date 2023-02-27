@@ -72,8 +72,13 @@ public class DataLoader implements CommandLineRunner {
     List<Medication> loadedMed1 = new ArrayList<>();
     loadedMed1.add(medication2);
 
+    List<Medication> loadedMed2 = new ArrayList<>();
+    loadedMed2.add(medication3);
+
     drone1.setLoadedMedication(loadedMed1);
+    drone2.setLoadedMedication(loadedMed2);
     droneRepository.save(drone1);
+    droneRepository.save(drone2);
     System.out.println("Medications loaded to drone Successfully");
 
   }
